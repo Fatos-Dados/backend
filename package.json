@@ -1,5 +1,5 @@
 {
-  "name": "auth_backend",
+  "name": "backend",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "migration": "node ace migration:refresh"
   },
   "eslintConfig": {
     "extends": [
@@ -52,10 +53,22 @@
     "youch-terminal": "^2.1.4"
   },
   "dependencies": {
+    "@adonisjs/auth": "^8.2.2",
+    "@adonisjs/bouncer": "^2.3.0",
     "@adonisjs/core": "^5.8.0",
+    "@adonisjs/lucid": "^18.1.0",
     "@adonisjs/repl": "^3.1.0",
+    "@fnando/cnpj": "^1.0.2",
+    "@types/cnpj": "^3.1.0",
+    "cnpj": "^4.0.1",
+    "cpf-check": "^3.0.0",
+    "luxon": "^3.0.1",
+    "mysql": "^2.18.1",
+    "pg": "^8.8.0",
+    "phc-argon2": "^1.1.3",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.21"
+    "source-map-support": "^0.5.21",
+    "sqlite3": "^5.0.11"
   }
 }

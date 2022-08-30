@@ -20,4 +20,8 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   constructor() {
     super(Logger)
   }
+
+  public async handle(error: Error, ctx: any) {
+    return super.handle(error, ctx)
+  }
 }

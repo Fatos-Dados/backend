@@ -2,14 +2,38 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import UserStore from 'App/Validators/UserStoreValidator'
 import UserUpdate from 'App/Validators/UserUpdateValidator'
+import { DateTime } from 'luxon'
 
 export default class UsersController {
   public async store({ request, response, auth }: HttpContextContract) {
-    const { name, password, email } = await request.validate(UserStore)
-    const user = await User.create({ name, password, email, rememberMeToken: 'true' })
+    const { name, password, email, cpfCnpj, zipCode, streetName, streetNumber } =
+      await request.validate(UserStore)
+
+    const user = await User.create({
+      name,
+      password,
+      email,
+      zipCode,
+      streetName,
+      streetNumber,
+      cpfCnpj,
+      rememberMeToken: 'true',
+      role: 'gestor',
+    })
+
+    await user.related('service').create({
+      name: 'Gratís',
+      description: 'Serviço Padrão',
+      duration: DateTime.utc(2050, 1),
+      price: 0,
+    })
+
+    await user.load('service')
+
     const token = await auth.attempt(email, password)
+
     return response.created({
-      content: { user, token },
+      content: { user, ...token },
       message: 'Usuário criado com sucesso',
     })
   }
@@ -34,13 +58,4 @@ export default class UsersController {
       message: 'Usuário atualizado com sucesso',
     })
   }
-
-  // public async destroy({ request, response, bouncer }: HttpContextContract) {}
-
-  // public async index({ auth }: HttpContextContract) {
-  //   return response.ok({
-  //     content: { users },
-  //     message: 'Usuários recuperados com sucesso',
-  //   })
-  // }
 }

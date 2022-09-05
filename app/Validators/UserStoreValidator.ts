@@ -8,7 +8,10 @@ export default class UserStoreValidator {
     name: schema.string(),
     email: schema.string({}, [rules.email(), rules.unique({ table: 'users', column: 'email' })]),
     password: schema.string({}, [rules.minLength(6)]),
-    cpfOrCnpj: schema.string({}, [rules.cpfCnpj()]),
+    cpfCnpj: schema.string({}, [rules.cpfCnpj()]),
+    zipCode: schema.string({}, [rules.minLength(8)]),
+    streetName: schema.string(),
+    streetNumber: schema.number(),
   })
 
   public messages: CustomMessages = {
@@ -17,7 +20,7 @@ export default class UserStoreValidator {
     'email.email': 'O e-mail informado não é válido',
     'password.required': 'A senha é obrigatória',
     'password.minLength': 'A senha deve ter no mínimo 6 caracteres',
-    'cpfOrCnpj.cpfCnpj': 'O CPF ou CNPJ informado não é válido',
-    'cpfOrCnpj.required': 'O CPF ou CNPJ é obrigatório',
+    'cpfCnpj.cpfCnpj': 'O CPF ou CNPJ informado não é válido',
+    'cpfCnpj.required': 'O CPF ou CNPJ é obrigatório',
   }
 }

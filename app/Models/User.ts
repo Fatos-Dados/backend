@@ -1,8 +1,17 @@
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, beforeSave, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeSave,
+  column,
+  HasMany,
+  hasMany,
+  hasOne,
+  HasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
+import Collaborator from './Collaborator'
 
-import Perm from './Perm'
+import Service from './Service'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -14,25 +23,31 @@ export default class User extends BaseModel {
   @column()
   public email: string
 
-  @column()
+  @column({ columnName: 'cpf_cnpj' })
   public cpfCnpj: string
 
-  @column()
+  @column({ columnName: 'zip_code' })
   public zipCode: string
 
-  @column()
+  @column({ columnName: 'street_name' })
   public streetName: string
 
-  @column()
+  @column({ columnName: 'street_number' })
   public streetNumber: number
-
-  @hasMany(() => Perm)
-  public perms: HasMany<typeof Perm>
 
   @column({ serializeAs: null })
   public password: string
 
-  @column()
+  @column({})
+  public role: 'gestor'
+
+  @hasMany(() => Collaborator)
+  public collaborators: HasMany<typeof Collaborator>
+
+  @hasOne(() => Service)
+  public service: HasOne<typeof Service>
+
+  @column({ columnName: 'remember_me_token' })
   public rememberMeToken?: string
 
   @column.dateTime({ autoCreate: true })
@@ -46,21 +61,6 @@ export default class User extends BaseModel {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
-  }
-
-  public static async hasPerm(user: User, perm: string | string[]): Promise<boolean> {
-    await user.load('perms')
-    const perms = user.perms.map((p) => p.name)
-
-    if (typeof perm === 'string') {
-      return perms.includes(perm)
-    }
-
-    return perm.every((p) => perms.includes(p))
-  }
-
-  public static async isStaff(user: User) {
-    return await User.hasPerm(user, 'staff')
   }
 
   public static async findByEmail(email: string) {

@@ -1,13 +1,22 @@
-import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 
-export default class Perm extends BaseModel {
+export default class Service extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
   public name: string
+
+  @column()
+  public description: string
+
+  @column()
+  public price: number
+
+  @column()
+  public duration: DateTime
 
   @column()
   public userId: number

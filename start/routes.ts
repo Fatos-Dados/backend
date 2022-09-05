@@ -34,3 +34,16 @@ Route.group(() => {
   Route.put('/:id', 'UsersController.update').middleware('auth')
   Route.delete('/:id', 'UsersController.destroy').middleware('auth')
 }).prefix('/users')
+
+Route.group(() => {
+  Route.post('', 'SessionsController.store')
+  Route.get('', 'SessionsController.index')
+  Route.delete('', 'SessionsController.destroy')
+}).prefix('/sessions')
+
+Route.group(() => {
+  Route.post('', 'CollaboratorsController.store')
+  Route.get('', 'CollaboratorsController.index')
+})
+  .prefix('/collaborators')
+  .middleware('auth')
